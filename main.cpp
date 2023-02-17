@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <fstream>
+
 #include "sorts/bubbleSorts.cpp"
 #include "sorts/insertionSorts.cpp"
 #include "sorts/selectionSort.cpp"
@@ -34,8 +36,8 @@ std::vector<std::string> gen_names({
 
 
 /// вычисляет значения времени для всех комбинаций сортировок и методов генерации массива фиксированного размера
-std::vector<uint64_t> tester(int size) {
-    std::vector<uint64_t> result ({static_cast<uint64_t>(size)});
+std::vector<uint64_t> calculateComputingTimes(int size) {
+    std::vector<uint64_t> result;
     for (int k = 0; k < generators.size(); ++k) {
         std::vector<int> original = generators[k](size);
         for (int j = 0; j < sorts.size(); ++j) {
@@ -52,6 +54,17 @@ std::vector<uint64_t> tester(int size) {
         }
     }
     return result;
+}
+
+std::string getNames() {
+    std::string first_row = "Array sizes";
+    for (int k = 0; k < generators.size(); ++k) {
+        for (int j = 0; j < sorts.size(); ++j) {
+            first_row.append(";" + gen_names[k] + " & " + sort_names[j]);
+        }
+    }
+    first_row.append("\n");
+    return first_row;
 }
 
 
