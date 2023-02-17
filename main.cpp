@@ -67,6 +67,35 @@ std::string getNames() {
     return first_row;
 }
 
+void fillTable(std::ofstream *stream, int size) {
+    std::vector<uint64_t> times = calculateComputingTimes(size);
+    std::string table_row = std::to_string(size);
+    for (auto comp_time : times) {
+        table_row.append(";" + std::to_string(comp_time));
+    }
+    table_row.append("\n");
+    std::cout << table_row;
+    *stream << table_row;
+}
+
+void smallArraysTest() {
+    std::ofstream table("C:/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizes.csv");
+    table << getNames();
+    for (int size = 50; size <= 300; size += 50) {
+        fillTable(&table, size);
+    }
+    table.close();
+}
+
+void largeArraysTest() {
+    std::ofstream table("C:/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizes.csv");
+    table << getNames();
+    for (int size = 100; size <= 4100; size += 100) {
+        fillTable(&table, size);
+    }
+    table.close();
+}
+
 
 int main() {
     std::vector<int> v = {5, 4, 3, 4, 1};
