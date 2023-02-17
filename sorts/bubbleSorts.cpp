@@ -15,7 +15,7 @@ void bubbleSort(std::vector<int>& array) {
 }
 
 /// сортировка пузырьком с условием Айверсона (1)
-void bubbleSortAiverson1(std::vector<int>& array) {
+void bubbleSortIverson1(std::vector<int>& array) {
     int n = array.size();
     bool condition = true;
     for (int i = 0; condition; ++i) {
@@ -32,7 +32,7 @@ void bubbleSortAiverson1(std::vector<int>& array) {
 }
 
 /// сортировка пузырьком с условием Айверсона (1 и 2)
-void bubbleSortAiverson12(std::vector<int>& array) {
+void bubbleSortIverson12(std::vector<int>& array) {
     int n = array.size();
     bool condition = true;
     int old_bound = n - 1;

@@ -3,7 +3,7 @@
 /// сортировка Шелла
 void shellSort(std::vector<int>& array) {
     int n = array.size();
-    for (int d = n / 2; d != 0; d /= 2) {
+    for (int d = n >> 1; d != 0; d >>= 1) {
         for (int i = d; i < n; ++i) {
             for (int j = i; j >= d && array[j] < array[j - d]; j -= d) {
                 int temp = array[j];

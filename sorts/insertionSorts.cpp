@@ -1,7 +1,7 @@
 #include <vector>
 
 /// сортировка простыми вставками
-void simbleInsertionSort(std::vector<int>& array) {
+void simpleInsertionSort(std::vector<int>& array) {
     int n = array.size();
     for (int j = 1; j < n; ++j) {
         int key = array[j];
