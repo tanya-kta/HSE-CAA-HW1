@@ -9,6 +9,7 @@
 #include "sorts/mergeSort.cpp"
 #include "sorts/heapSort.cpp"
 #include "sorts/shellSorts.cpp"
+#include "utils.cpp"
 
 
 int main() {
