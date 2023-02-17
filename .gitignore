@@ -1,3 +1,7 @@
+.idea
+.clang-tidy
+.clang-format
+
 # Prerequisites
 *.d
 
