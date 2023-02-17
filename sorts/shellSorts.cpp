@@ -6,7 +6,9 @@ void shellSort(std::vector<int>& array) {
     for (int d = n / 2; d != 0; d /= 2) {
         for (int i = d; i < n; ++i) {
             for (int j = i; j >= d && array[j] < array[j - d]; j -= d) {
-                std::swap(array[j], array[j - d]);
+                int temp = array[j];
+                array[j] = array[j - d];
+                array[j - d] = temp;
             }
         }
     }
@@ -19,8 +21,9 @@ void ciuraShellSort(std::vector<int>& array) {
     for (int d : sequence) {
         for (int i = d; i < n; ++i) {
             for (int j = i; j >= d && array[j] < array[j - d]; j -= d) {
-                std::swap(array[j], array[j - d]);
-            }
+                int temp = array[j];
+                array[j] = array[j - d];
+                array[j - d] = temp;            }
         }
     }
 }

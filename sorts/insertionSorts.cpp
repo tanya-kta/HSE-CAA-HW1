@@ -29,7 +29,9 @@ void binaryInsertionSort(std::vector<int>& array) {
             }
         }
         for (int m = j; m > l; --m) {
-            std::swap(array[m], array[m + 1]);
+            int temp = array[m];
+            array[m] = array[m + 1];
+            array[m + 1] = temp;
         }
     }
 }
