@@ -23,7 +23,8 @@ void ciuraShellSort(std::vector<int>& array) {
             for (int j = i; j >= d && array[j] < array[j - d]; j -= d) {
                 int temp = array[j];
                 array[j] = array[j - d];
-                array[j - d] = temp;            }
+                array[j - d] = temp;
+            }
         }
     }
 }
