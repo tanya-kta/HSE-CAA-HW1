@@ -13,6 +13,5 @@ void selectionSort(std::vector<int>& array) {
         int temp = array[i];
         array[i] = array[mx];
         array[mx] = temp;
-        std::swap(array[i], array[mx]);
     }
 }

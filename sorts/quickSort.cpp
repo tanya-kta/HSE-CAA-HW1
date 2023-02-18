@@ -7,6 +7,9 @@ void quickSortHelper(Iter begin, Iter end) {
     int m = *begin;
     int n = end - begin;
     int l = 0, r = n - 1;
+    if (n == 1) {
+        return;
+    }
     while (l < r) {
         while (*(begin + r) >= m && l < r) {
             r--;
@@ -19,11 +22,11 @@ void quickSortHelper(Iter begin, Iter end) {
         *(begin + r) = temp;
     }
 
-    if (l > 1) {
-        quickSortHelper(begin, begin + l);
+    if (l > 0) {
+        quickSortHelper(begin, begin + l + 1);
     }
-    if (l < n - 2) {
-        quickSortHelper(begin + l + 1, begin + n - l);
+    if (l < n - 1) {
+        quickSortHelper(begin + l + 1, end);
     }
 }
 

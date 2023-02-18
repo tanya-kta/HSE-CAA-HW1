@@ -6,9 +6,8 @@ void radixSort(std::vector<int>& array) {
     for (int k = 0; k < 4; ++k) {
         std::vector<int> values(256);
         int mask = (1 << 8) - 1;
-        mask <<= k * 8;
         for (int i = 0; i < n; ++i) {
-            int byte = array[i] & mask;
+            int byte = (array[i] >> (k * 8)) & mask;
             ++values[byte];
         }
         for (int i = 1; i < 256; ++i) {
@@ -16,7 +15,7 @@ void radixSort(std::vector<int>& array) {
         }
         std::vector<int> sorted(n);
         for (int i = n - 1; i >= 0; --i) {
-            int byte = array[i] & mask;
+            int byte = (array[i] >> (k * 8)) & mask;
             values[byte]--;
             sorted[values[byte]] = array[i];
         }
