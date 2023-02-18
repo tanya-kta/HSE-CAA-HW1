@@ -34,14 +34,15 @@ std::vector<std::string> gen_names({
     "random_small_range", "random_large_range", "almost_sorted", "decreasing"
 });
 
+std::vector<uint64_t> computing_times(sorts.size() * generators.size());
 
 /// вычисляет значения времени для всех комбинаций сортировок и методов генерации массива фиксированного размера
-std::vector<uint64_t> calculateComputingTimes(int size) {
-    std::vector<uint64_t> result;
+void calculateComputingTimes(int size) {
+    std::vector<int> original, to_sort;
     for (int k = 0; k < generators.size(); ++k) {
-        std::vector<int> original = generators[k](size);
+        original = generators[k](size);
         for (int j = 0; j < sorts.size(); ++j) {
-            std::vector<int> to_sort = original;
+            to_sort = original;
             auto start = std::chrono::high_resolution_clock::now();
             sorts[j](to_sort);
             auto elapsed = std::chrono::high_resolution_clock::now() - start;
@@ -49,11 +50,13 @@ std::vector<uint64_t> calculateComputingTimes(int size) {
                 std::cout << "failed to sort array size " << size << " generated " << gen_names[k] <<
                     " using " << sort_names[j] << "\nOriginal array:";
                 printArray(original);
+                std::cout << "Sorted array: ";
+                printArray(to_sort);
             }
-            result.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count());
+            computing_times[k * sorts.size() + j] =
+                std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
         }
     }
-    return result;
 }
 
 std::string getNames() {
@@ -68,18 +71,17 @@ std::string getNames() {
 }
 
 void fillTable(std::ofstream *stream, int size) {
-    std::vector<uint64_t> times = calculateComputingTimes(size);
+    calculateComputingTimes(size);
     std::string table_row = std::to_string(size);
-    for (auto comp_time : times) {
+    for (auto comp_time : computing_times) {
         table_row.append(";" + std::to_string(comp_time));
     }
     table_row.append("\n");
-    std::cout << table_row;
     *stream << table_row;
 }
 
 void smallArraysTest() {
-    std::ofstream table("C:/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizes.csv");
+    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizes.csv");
     table << getNames();
     for (int size = 50; size <= 300; size += 50) {
         fillTable(&table, size);
@@ -88,7 +90,7 @@ void smallArraysTest() {
 }
 
 void largeArraysTest() {
-    std::ofstream table("C:/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizes.csv");
+    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizes.csv");
     table << getNames();
     for (int size = 100; size <= 4100; size += 100) {
         fillTable(&table, size);
@@ -98,10 +100,7 @@ void largeArraysTest() {
 
 
 int main() {
-    std::vector<int> v = {5, 4, 3, 4, 1};
-    bubbleSort(v);
-    for (int i = 0; i < v.size(); ++i) {
-        std::cout << v[i];
-    }
+    smallArraysTest();
+    largeArraysTest();
     return 0;
 }
