@@ -1,3 +1,12 @@
+/*
+ * АиСД-2, 2023, задание 5
+ * Кадыкова Татьяна Алексеевна
+ * БПИ213
+ * CLion
+ * Сделаны изменения времени и количества операцией всех 13 сортировок для всех массивов и запись их в таблицу
+ */
+
+
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -15,7 +24,7 @@
 #include "utils.cpp"
 #include "generate.cpp"
 
-std::vector<void (*)(std::vector<int>&)> sorts({
+std::vector<void (*)(std::vector<int>&, uint64_t *)> sorts({
     bubbleSort, bubbleSortIverson1, bubbleSortIverson12,
     countingSort, heapSort, simpleInsertionSort, binaryInsertionSort,
     mergeSort, quickSort, radixSort, selectionSort,
@@ -31,10 +40,11 @@ std::vector<std::vector<int> (*)(int)> generators({
     smallRangeArray, largeRangeArray, almostSortedArray, decreasingArray
 });
 std::vector<std::string> gen_names({
-    "random_small_range", "random_large_range", "almost_sorted", "decreasing"
+    "RandomSmallRange", "RandomLargeRange", "AlmostSorted", "Decreasing"
 });
 
 std::vector<uint64_t> computing_times(sorts.size() * generators.size());
+std::vector<uint64_t> operations_count(sorts.size() * generators.size(), 0);
 
 /// вычисляет значения времени для всех комбинаций сортировок и методов генерации массива фиксированного размера
 void calculateComputingTimes(int size) {
@@ -44,7 +54,7 @@ void calculateComputingTimes(int size) {
         for (int j = 0; j < sorts.size(); ++j) {
             to_sort = original;
             auto start = std::chrono::high_resolution_clock::now();
-            sorts[j](to_sort);
+            sorts[j](to_sort, &operations_count[k * sorts.size() + j]);
             auto elapsed = std::chrono::high_resolution_clock::now() - start;
             if (!checker(original, to_sort)) {
                 std::cout << "failed to sort array size " << size << " generated " << gen_names[k] <<
@@ -70,32 +80,45 @@ std::string getNames() {
     return first_row;
 }
 
-void fillTable(std::ofstream *stream, int size) {
+void fillTable(std::ofstream *stream_time, std::ofstream *stream_oper, int size) {
     calculateComputingTimes(size);
     std::string table_row = std::to_string(size);
     for (auto comp_time : computing_times) {
         table_row.append(";" + std::to_string(comp_time));
     }
     table_row.append("\n");
-    *stream << table_row;
+    *stream_time << table_row;
+
+    table_row = std::to_string(size);
+    for (auto operations : operations_count) {
+        table_row.append(";" + std::to_string(operations));
+    }
+    table_row.append("\n");
+    *stream_oper << table_row;
 }
 
 void smallArraysTest() {
-    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizes.csv");
+    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizesTimes.csv");
+    std::ofstream table_oper("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/smallSizesOper.csv");
     table << getNames();
+    table_oper << getNames();
     for (int size = 50; size <= 300; size += 50) {
-        fillTable(&table, size);
+        fillTable(&table, &table_oper, size);
     }
     table.close();
+    table_oper.close();
 }
 
 void largeArraysTest() {
-    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizes.csv");
+    std::ofstream table("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizesTimes.csv");
+    std::ofstream table_oper("/mnt/c/Users/tanya/Documents/CLionProjects/HSE-HW1/bigSizesOper.csv");
     table << getNames();
+    table_oper << getNames();
     for (int size = 100; size <= 4100; size += 100) {
-        fillTable(&table, size);
+        fillTable(&table, &table_oper, size);
     }
     table.close();
+    table_oper.close();
 }
 
 
